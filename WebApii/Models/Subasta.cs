@@ -7,27 +7,27 @@ namespace WebApii.Models
 {
     public class Subasta
     {
-        private string id;
+        private int id;
         private string articulo;
         private float precio;
         private bool finalizado;
-        private Usuario vendedor;
-        private Usuario comprador;
+        private int vendedor;
+        private int comprador;
         private DateTime fin;
         private DateTime comienzo;
         private string imagen;
         private string desripcion;
         private string categoria;
 
-        public Subasta(string id, string articulo, float precio, Usuario vendedor, DateTime fin, DateTime comienzo,
+        public Subasta(int id, string articulo, float precio, bool habilitado, int vendedor, int comprador, DateTime fin, DateTime comienzo,
             string imagen, string desripcion, string categoria)
         {
             this.Id = id;
             this.Articulo = articulo;
             this.Precio = precio;
-            this.Finalizado = false;
+            this.Finalizado = habilitado;
             this.Vendedor = vendedor;
-            this.Comprador = null;
+            this.Comprador = comprador;
             this.Fin = fin;
             this.Comienzo = comienzo;
             this.Imagen = imagen;
@@ -35,14 +35,14 @@ namespace WebApii.Models
             this.Categoria = categoria;
         }
 
-        public Subasta(string id)
+        public Subasta(int id)
         {
             this.Id = id;
             this.Articulo = "";
             this.Precio = 0;
             this.Finalizado = false;
-            this.Vendedor = null;
-            this.Comprador = null;
+            this.Vendedor = -1;
+            this.Comprador = -1;
             this.Fin = DateTime.Now;
             this.Comienzo = DateTime.Now;
             this.Imagen = "";
@@ -50,7 +50,7 @@ namespace WebApii.Models
             this.Categoria = "";
         }
 
-        public string Id { get => id; set => id = value; }
+        public int Id { get => id; set => id = value; }
         public string Articulo { get => articulo; set => articulo = value; }
         public float Precio { get => precio; set => precio = value; }
         public bool Finalizado { get => finalizado; set => finalizado = value; }
@@ -59,7 +59,7 @@ namespace WebApii.Models
         public string Imagen { get => imagen; set => imagen = value; }
         public string Desripcion { get => desripcion; set => desripcion = value; }
         public string Categoria { get => categoria; set => categoria = value; }
-        internal Usuario Vendedor { get => vendedor; set => vendedor = value; }
-        internal Usuario Comprador { get => comprador; set => comprador = value; }
+        internal int Vendedor { get => vendedor; set => vendedor = value; }
+        internal int Comprador { get => comprador; set => comprador = value; }
     }
 }
