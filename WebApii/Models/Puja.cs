@@ -7,9 +7,9 @@ namespace WebApii.Models
 {
     public class Puja
     {
-        public Subasta subasta { get; set; }
-        public Usuario pujador { get; set; }
-        public float cantidad { get; set; }
-        public DateTime fecha { get; set; }
+        public int idsubasta { get; set; }
+        public int idusuario { get; set; }
+        public float preciopuja { get; set; }
+        public DateTime tiempo { get; set; }
     }
 }

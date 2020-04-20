@@ -8,7 +8,7 @@ namespace WebApii.Controllers
     public class UsuarioController : ApiController
     {
         List<Usuario> usuarios = new List<Usuario>();
-        static string conexion = "server=127.0.0.1; port=3306;user id=root; password=;database=bdsubastas;";
+        string conexion = "server=127.0.0.1; port=3306;user id=root; password=;database=bdsubastas;";
         public IEnumerable<Usuario> GetAllUsuarios()
         {
             MySqlConnection conn = new MySqlConnection(conexion);
