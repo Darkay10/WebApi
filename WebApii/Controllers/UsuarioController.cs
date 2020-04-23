@@ -46,33 +46,45 @@ namespace WebApii.Controllers
 
         public bool InsertUsuario(string u, string p, string e, string d, string l, string pais, string cod, int rol)
         {
-            bool hecho = true;
+            bool hecho = false;
             MySqlConnection conn = new MySqlConnection(conexion);
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand("INSERT INTO usuario (username, pass, email, direccion, localidad, pais, codigop, tipousuario, habilitado) VALUES ('"+u+ "', '"+p+ "', '"+e+"', '"+d+"', '"+l+"', '"+pais+"', '"+cod+"', rol, TRUE)", conn);
-            cmd.ExecuteNonQuery();
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO usuario (username, pass, email, direccion, localidad, pais, codigop, tipousuario, habilitado) VALUES ('"+u+ "', '"+p+ "', '"+e+"', '"+d+"', '"+l+"', '"+pais+"', '"+cod+"', "+rol+", TRUE)", conn);
+            int res = cmd.ExecuteNonQuery();
+            if (res != 0)
+            {
+                hecho = true;
+            }
             conn.Close();
             return hecho;
         }
 
         public bool UpdateUsuario(int id, string u, string p, string e, string d, string l, string pais, string cod, int rol)
         {
-            bool hecho = true;
+            bool hecho = false;
             MySqlConnection conn = new MySqlConnection(conexion);
             conn.Open();
             MySqlCommand cmd = new MySqlCommand("UPDATE usuario SET username = '"+u+"', pass = '" + p + "', email = '" + e + "', direccion = '" + d + "', localidad = '" + l + "', pais = '" + pais + "', codigop = '" + cod + "', tipousuario = '" + rol + "' WHERE id = " + id, conn);
-            cmd.ExecuteNonQuery();
+            int res = cmd.ExecuteNonQuery();
+            if (res != 0)
+            {
+                hecho = true;
+            }
             conn.Close();
             return hecho;
         }
 
         public bool DeleteUsuario(int id)
         {
-            bool hecho = true;
+            bool hecho = false;
             MySqlConnection conn = new MySqlConnection(conexion);
             conn.Open();
             MySqlCommand cmd = new MySqlCommand("UPDATE usuario SET habilitado = FALSE WHERE id = " + id, conn);
-            cmd.ExecuteNonQuery();
+            int res = cmd.ExecuteNonQuery();
+            if (res != 0)
+            {
+                hecho = true;
+            }
             conn.Close();
             return hecho;
         }

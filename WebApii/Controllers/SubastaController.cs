@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Web.Http;
 using WebApii.Models;
@@ -42,6 +43,51 @@ namespace WebApii.Controllers
                 return NotFound();
             }
             return Ok(subastas);
+        }
+
+        public bool InsertSubasta(string a, float p, int idv, int idc, DateTime ti, DateTime tf, string i, string d, string c)
+        {
+            bool hecho = false;
+            MySqlConnection conn = new MySqlConnection(conexion);
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO subasta (articulo, precio, finalizado, idvendedor, idcomprador, tiempoinicio, tiempofinal, imagen, descripcion, categoria) VALUES ('" + a + "', '" + p + "', TRUE, " + idv + ", " + idc + ", '" + ti + "', '" + tf + "', '" + i + "', '" + d + "', '" + c + "')", conn);
+            int res = cmd.ExecuteNonQuery();
+            if (res != 0)
+            {
+                hecho = true;
+            }
+            conn.Close();
+            return hecho;
+        }
+
+        public bool UpdateSubasta(int id, string a, float p, int idc, DateTime ti, DateTime tf, string i, string d, string c)
+        {
+            bool hecho = false;
+            MySqlConnection conn = new MySqlConnection(conexion);
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("UPDATE subasta SET articulo = '" + a + "', precio = '" + p + "', idcomprador = '" + idc + "', tiempoinicio = '" + ti + "', tiempofinal = '" + tf + "', imagen = '" + i + "', descripcion = '" + d + "', categoria = '" + c + "' WHERE id = " + id, conn);
+            int res = cmd.ExecuteNonQuery();
+            if (res != 0)
+            {
+                hecho = true;
+            }
+            conn.Close();
+            return hecho;
+        }
+
+        public bool DeleteSubasta(int id)
+        {
+            bool hecho = false;
+            MySqlConnection conn = new MySqlConnection(conexion);
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("UPDATE subasta SET finalizado = FALSE WHERE id = " + id, conn);
+            int res = cmd.ExecuteNonQuery();
+            if (res != 0)
+            {
+                hecho = true;
+            }
+            conn.Close();
+            return hecho;
         }
     }
 }
