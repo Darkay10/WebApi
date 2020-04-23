@@ -17,7 +17,7 @@ namespace WebApii.Controllers
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                usuarios.Add(new Usuario { id = reader.GetInt32(0), user = reader.GetString(1), pass = reader.GetString(2), email = reader.GetString(3), direccion = reader.GetString(4), localidad = reader.GetString(5), cp = reader.GetString(6), pais = reader.GetString(7), rol = reader.GetInt32(8), Habilitado = reader.GetBoolean(9) });
+                usuarios.Add(new Usuario { id = reader.GetInt32(0), user = reader.GetString(1), pass = reader.GetString(2), email = reader.GetString(3), direccion = reader.GetString(4), localidad = reader.GetString(5), pais = reader.GetString(6), cp = reader.GetString(7), rol = reader.GetInt32(8), Habilitado = reader.GetBoolean(9) });
             }
             return usuarios;
         }
@@ -33,7 +33,7 @@ namespace WebApii.Controllers
             {
                 if (reader.GetInt32(0) == id)
                 {
-                    usuarios.Add(new Usuario { id = reader.GetInt32(0), user = reader.GetString(1), pass = reader.GetString(2), email = reader.GetString(3), direccion = reader.GetString(4), localidad = reader.GetString(5), cp = reader.GetString(6), pais = reader.GetString(7), rol = reader.GetInt32(8), Habilitado = reader.GetBoolean(9) });
+                    usuarios.Add(new Usuario { id = reader.GetInt32(0), user = reader.GetString(1), pass = reader.GetString(2), email = reader.GetString(3), direccion = reader.GetString(4), localidad = reader.GetString(5), pais = reader.GetString(6), cp = reader.GetString(7), rol = reader.GetInt32(8), Habilitado = reader.GetBoolean(9) });
                     existe = true;
                 }
             }
@@ -42,6 +42,39 @@ namespace WebApii.Controllers
                 return NotFound();
             }
             return Ok(usuarios);
+        }
+
+        public bool InsertUsuario(string u, string p, string e, string d, string l, string pais, string cod, int rol)
+        {
+            bool hecho = true;
+            MySqlConnection conn = new MySqlConnection(conexion);
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO usuario (username, pass, email, direccion, localidad, pais, codigop, tipousuario, habilitado) VALUES ('"+u+ "', '"+p+ "', '"+e+"', '"+d+"', '"+l+"', '"+pais+"', '"+cod+"', rol, TRUE)", conn);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            return hecho;
+        }
+
+        public bool UpdateUsuario(int id, string u, string p, string e, string d, string l, string pais, string cod, int rol)
+        {
+            bool hecho = true;
+            MySqlConnection conn = new MySqlConnection(conexion);
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("UPDATE usuario SET username = '"+u+"', pass = '" + p + "', email = '" + e + "', direccion = '" + d + "', localidad = '" + l + "', pais = '" + pais + "', codigop = '" + cod + "', tipousuario = '" + rol + "' WHERE id = " + id, conn);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            return hecho;
+        }
+
+        public bool DeleteUsuario(int id)
+        {
+            bool hecho = true;
+            MySqlConnection conn = new MySqlConnection(conexion);
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("UPDATE usuario SET habilitado = FALSE WHERE id = " + id, conn);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            return hecho;
         }
     }
 }
