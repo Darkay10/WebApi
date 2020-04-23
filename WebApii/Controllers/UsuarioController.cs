@@ -43,14 +43,15 @@ namespace WebApii.Controllers
             }
             return Ok(usuarios);
         }
-
+        //  InsertUsuario?u=Jose&p=Jose&e=222&d=Calle&l=Alicante&pais=Mozambique&cod=22221&rol=1
+        [HttpGet]
         public bool InsertUsuario(string u, string p, string e, string d, string l, string pais, string cod, int rol)
         {
             bool hecho = false;
             MySqlConnection conn = new MySqlConnection(conexion);
             conn.Open();
             MySqlCommand cmd = new MySqlCommand("INSERT INTO usuario (username, pass, email, direccion, localidad, pais, codigop, tipousuario, habilitado) VALUES ('"+u+ "', '"+p+ "', '"+e+"', '"+d+"', '"+l+"', '"+pais+"', '"+cod+"', "+rol+", TRUE)", conn);
-            int res = cmd.ExecuteNonQuery();
+            int res = cmd.ExecuteNonQuery();    
             if (res != 0)
             {
                 hecho = true;
@@ -58,7 +59,7 @@ namespace WebApii.Controllers
             conn.Close();
             return hecho;
         }
-
+        [HttpGet]
         public bool UpdateUsuario(int id, string u, string p, string e, string d, string l, string pais, string cod, int rol)
         {
             bool hecho = false;
@@ -73,7 +74,7 @@ namespace WebApii.Controllers
             conn.Close();
             return hecho;
         }
-
+        [HttpGet]
         public bool DeleteUsuario(int id)
         {
             bool hecho = false;

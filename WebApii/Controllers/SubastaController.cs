@@ -45,6 +45,7 @@ namespace WebApii.Controllers
             return Ok(subastas);
         }
 
+        [HttpGet]
         public bool InsertSubasta(string a, float p, int idv, int idc, DateTime ti, DateTime tf, string i, string d, string c)
         {
             bool hecho = false;
@@ -59,7 +60,7 @@ namespace WebApii.Controllers
             conn.Close();
             return hecho;
         }
-
+        [HttpGet]
         public bool UpdateSubasta(int id, string a, float p, int idc, DateTime ti, DateTime tf, string i, string d, string c)
         {
             bool hecho = false;
@@ -75,6 +76,7 @@ namespace WebApii.Controllers
             return hecho;
         }
 
+        [HttpGet]
         public bool DeleteSubasta(int id)
         {
             bool hecho = false;
