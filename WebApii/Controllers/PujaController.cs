@@ -13,19 +13,8 @@ namespace WebApii.Controllers
     {
         List<Puja> pujas = new List<Puja>();
         string conexion = "server=127.0.0.1; port=3306;user id=root; password=;database=bdsubastas;";
-        public IEnumerable<Puja> GetAllUsuarios()
-        {
-            MySqlConnection conn = new MySqlConnection(conexion);
-            conn.Open();
-            MySqlCommand cmd = new MySqlCommand("Select * from puja", conn);
-            MySqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                pujas.Add(new Puja { idsubasta = reader.GetInt32(0), idusuario = reader.GetInt32(1), preciopuja = reader.GetFloat(2), tiempo = reader.GetDateTime(3) });
-            }
-            return pujas;
-        }
-        public IHttpActionResult GetUsuario(int id)
+        // FUNCION QUE UTILIZAREMOS PARA MOSTRAR EL PRECIO MÁXIMO DE LA PUJA - Ver subastas y mis subastas
+        public IHttpActionResult GetPuja(int id)
         {
             bool existe = false;
             MySqlConnection conn = new MySqlConnection(conexion);
@@ -45,6 +34,38 @@ namespace WebApii.Controllers
                 return NotFound();
             }
             return Ok(pujas);
+        }
+        // FUNCION PARA CREAR PUJA - Ver subastas y mis subastas
+        [HttpGet]
+        public bool InsertPuja(int idu, int ids, float p, DateTime t)
+        {
+            bool hecho = false;
+            MySqlConnection conn = new MySqlConnection(conexion);
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO puja (idusuario, idsubasta, preciopuja, tiempo) VALUES (" + idu + ", " +ids + ", "+p+", "+ t + ")", conn);
+            int res = cmd.ExecuteNonQuery();
+            if (res != 0)
+            {
+                hecho = true;
+            }
+            conn.Close();
+            return hecho;
+        }
+        // Si existe ya una puja de un comprador, se cambia y se actualiza - Ver subastas y mis subastas
+        [HttpGet]
+        public bool UpdatePuja(int idu, int ids, float p, DateTime t)
+        {
+            bool hecho = false;
+            MySqlConnection conn = new MySqlConnection(conexion);
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("UPDATE puja SET preciopuja = "+p+", tiempo = '"+t+"' WHERE idsubasta = " + ids + " AND idusuario = "+ idu, conn);
+            int res = cmd.ExecuteNonQuery();
+            if (res != 0)
+            {
+                hecho = true;
+            }
+            conn.Close();
+            return hecho;
         }
     }
 }
