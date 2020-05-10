@@ -16,7 +16,7 @@ namespace WebApii.Controllers
         {
             MySqlConnection conn = new MySqlConnection(conexion);
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand("Select * from subasta where idcomprador != " + id, conn);
+            MySqlCommand cmd = new MySqlCommand("Select * from subasta where idcomprador != " + id + "", conn);
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -25,26 +25,17 @@ namespace WebApii.Controllers
             return subastas;
         }
 
-        public IHttpActionResult GetSubastaMias(int id) // SELECCIONAMOS UNA SUBASTA POR ID - Mis subastas
+        public IEnumerable<Subasta> GetSubastaMias(int id) // SELECCIONAMOS UNA SUBASTA POR ID - Mis subastas
         {
-            bool existe = false;
             MySqlConnection conn = new MySqlConnection(conexion);
             conn.Open();
             MySqlCommand cmd = new MySqlCommand("Select * from subasta where idcomprador = " + id, conn);
             MySqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read() && existe == false)
-            {
-                if (reader.GetInt32(0) == id)
-                {
-                    subastas.Add(new Subasta { id = reader.GetInt32(0), articulo = reader.GetString(1), precio = reader.GetFloat(2), finalizado = reader.GetBoolean(3), vendedor = reader.GetInt32(4), comprador = reader.GetInt32(5), comienzo = reader.GetDateTime(6), fin = reader.GetDateTime(7), imagen = reader.GetString(8), descripcion = reader.GetString(9), categoria = reader.GetString(10) });
-                    existe = true;
-                }
+            while (reader.Read())
+            {             
+                subastas.Add(new Subasta { id = reader.GetInt32(0), articulo = reader.GetString(1), precio = reader.GetFloat(2), finalizado = reader.GetBoolean(3), vendedor = reader.GetInt32(4), comprador = reader.GetInt32(5), comienzo = reader.GetDateTime(6), fin = reader.GetDateTime(7), imagen = reader.GetString(8), descripcion = reader.GetString(9), categoria = reader.GetString(10) });
             }
-            if (existe == false)
-            {
-                return NotFound();
-            }
-            return Ok(subastas);
+            return subastas;
         }
 
         public IHttpActionResult GetSubasta(int id) // SELECCIONAMOS UNA SUBASTA POR ID
@@ -100,7 +91,7 @@ namespace WebApii.Controllers
             conn.Close();
             return hecho;
         }
-        
+        // FUNCION PARA BORRAR SUBASTA - Eliminar subasta - Listado 
         [HttpGet]
         public bool DeleteSubasta(int id)   // FUNCION PARA ELIMINAR NOS SUBASTA
         {
@@ -118,7 +109,7 @@ namespace WebApii.Controllers
         }
     }
 }
-/*public IEnumerable<Subasta> GetAllSubastas()     // FUNCION EN LA QUE RECOGEMOS TODAS LAS SUBASTAS
+    /*public IEnumerable<Subasta> GetAllSubastas()     // FUNCION EN LA QUE RECOGEMOS TODAS LAS SUBASTAS
         {
             MySqlConnection conn = new MySqlConnection(conexion);
             conn.Open();
