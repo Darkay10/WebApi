@@ -17,6 +17,7 @@ namespace WebApii.Controllers
             conn.Open();
             MySqlCommand cmd = new MySqlCommand("Select * from usuario", conn);
             MySqlDataReader reader = cmd.ExecuteReader();
+            // LANZAMOS LA SELECT QUE NOS DEVUELVE TODOS LOS USUARIOS
             while (reader.Read())
             {
                 usuarios.Add(new Usuario { id = reader.GetInt32(0), user = reader.GetString(1), pass = reader.GetString(2), email = reader.GetString(3), direccion = reader.GetString(4), localidad = reader.GetString(5), pais = reader.GetString(6), cp = reader.GetString(7), rol = reader.GetInt32(8), Habilitado = reader.GetBoolean(9) });
@@ -31,6 +32,7 @@ namespace WebApii.Controllers
             conn.Open();
             MySqlCommand cmd = new MySqlCommand("Select * from usuario where id = " + id, conn);
             MySqlDataReader reader = cmd.ExecuteReader();
+            // BUSCAMOS EL USUARIO POR SU ID
             while (reader.Read() && existe == false)
             {
                 if (reader.GetInt32(0) == id)
@@ -50,8 +52,9 @@ namespace WebApii.Controllers
         {
             MySqlConnection conn = new MySqlConnection(conexion);
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand("Select * from usuario where id != " + id, conn);
+            MySqlCommand cmd = new MySqlCommand("Select * from usuario where id != " + id + " AND habilitado = TRUE", conn);
             MySqlDataReader reader = cmd.ExecuteReader();
+            // TODOS LOS USUARIOS QUE ESTEN HABILITADOS 
             while (reader.Read())
             {
                 usuarios.Add(new Usuario { id = reader.GetInt32(0), user = reader.GetString(1), pass = reader.GetString(2), email = reader.GetString(3), direccion = reader.GetString(4), localidad = reader.GetString(5), pais = reader.GetString(6), cp = reader.GetString(7), rol = reader.GetInt32(8), Habilitado = reader.GetBoolean(9) });
@@ -59,8 +62,8 @@ namespace WebApii.Controllers
             return usuarios;
         }
 
-        //  InsertUsuario?u=Jose&p=Jose&e=222&d=Calle&l=Alicante&pais=Mozambique&cod=22221&rol=1
-        // FUNCION QUE SE LE PASAN TODOS LOS DATOS Y SE INSERTAN A LA BASE DE DATOS
+        // InsertUsuario? u = Jose & p = Jose & e = 222 & d = Calle & l = Alicante & pais = Mozambique & cod = 22221 & rol = 1
+        // FUNCION QUE SE LE PASAN TODOS LOS DATOS Y SE INSERTAN A LA BASE DE DATOS - Por defecto el permiso de admin esta deshabilitado
         [HttpGet]
         public bool InsertUsuario(string u, string p, string e, string d, string l, string pais, string cod)
         {

@@ -14,26 +14,66 @@ namespace WebApii.Controllers
 
         public IEnumerable<Subasta> GetAllSubastasMenosUno(int id)     // FUNCION EN LA QUE RECOGEMOS TODAS LAS SUBASTAS, MENOS LAS NUESTRAS - Ver subastas
         {
+            float max = -1;
             MySqlConnection conn = new MySqlConnection(conexion);
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand("Select * from subasta where idcomprador != " + id + "", conn);
+            MySqlCommand cmd = new MySqlCommand("select * from subasta where idcomprador != " +id, conn);
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                subastas.Add(new Subasta { id = reader.GetInt32(0), articulo = reader.GetString(1), precio = reader.GetFloat(2), finalizado = reader.GetBoolean(3), vendedor = reader.GetInt32(4), comprador = reader.GetInt32(5), comienzo = reader.GetDateTime(6), fin = reader.GetDateTime(7), imagen = reader.GetString(8), descripcion = reader.GetString(9), categoria = reader.GetString(10) });
+                MySqlConnection connection = new MySqlConnection(conexion);
+                connection.Open();
+                MySqlCommand pujaMax = new MySqlCommand("select Max(preciopuja) AS 'Preciopuja' from puja where idsubasta = " + reader.GetInt32(0), connection);
+                MySqlDataReader maximo = pujaMax.ExecuteReader();
+                while (maximo.Read())
+                {
+                    if (!maximo.IsDBNull(0))
+                    {
+                        max = maximo.GetFloat(0);
+                    }
+                }
+                connection.Close();
+                if (max > 0)
+                {
+                    subastas.Add(new Subasta { id = reader.GetInt32(0), articulo = reader.GetString(1), precio = max, finalizado = reader.GetBoolean(3), vendedor = reader.GetInt32(4), comprador = reader.GetInt32(5), comienzo = reader.GetDateTime(6), fin = reader.GetDateTime(7), imagen = reader.GetString(8), descripcion = reader.GetString(9), categoria = reader.GetString(10) });
+                }
+                else
+                {
+                    subastas.Add(new Subasta { id = reader.GetInt32(0), articulo = reader.GetString(1), precio = reader.GetFloat(2), finalizado = reader.GetBoolean(3), vendedor = reader.GetInt32(4), comprador = reader.GetInt32(5), comienzo = reader.GetDateTime(6), fin = reader.GetDateTime(7), imagen = reader.GetString(8), descripcion = reader.GetString(9), categoria = reader.GetString(10) });
+                }
             }
             return subastas;
         }
 
         public IEnumerable<Subasta> GetSubastaMias(int id) // SELECCIONAMOS UNA SUBASTA POR ID - Mis subastas
         {
+            float max = -1;
             MySqlConnection conn = new MySqlConnection(conexion);
             conn.Open();
             MySqlCommand cmd = new MySqlCommand("Select * from subasta where idcomprador = " + id, conn);
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
-            {             
-                subastas.Add(new Subasta { id = reader.GetInt32(0), articulo = reader.GetString(1), precio = reader.GetFloat(2), finalizado = reader.GetBoolean(3), vendedor = reader.GetInt32(4), comprador = reader.GetInt32(5), comienzo = reader.GetDateTime(6), fin = reader.GetDateTime(7), imagen = reader.GetString(8), descripcion = reader.GetString(9), categoria = reader.GetString(10) });
+            {
+                MySqlConnection connection = new MySqlConnection(conexion);
+                connection.Open();
+                MySqlCommand pujaMax = new MySqlCommand("select Max(preciopuja) AS 'Preciopuja' from puja where idsubasta = " + reader.GetInt32(0), connection);
+                MySqlDataReader maximo = pujaMax.ExecuteReader();
+                while (maximo.Read())
+                {
+                    if (!maximo.IsDBNull(0))
+                    {
+                        max = maximo.GetFloat(0);
+                    }
+                }
+                connection.Close();
+                if (max > 0)
+                {
+                    subastas.Add(new Subasta { id = reader.GetInt32(0), articulo = reader.GetString(1), precio = max, finalizado = reader.GetBoolean(3), vendedor = reader.GetInt32(4), comprador = reader.GetInt32(5), comienzo = reader.GetDateTime(6), fin = reader.GetDateTime(7), imagen = reader.GetString(8), descripcion = reader.GetString(9), categoria = reader.GetString(10) });
+                }
+                else
+                {
+                    subastas.Add(new Subasta { id = reader.GetInt32(0), articulo = reader.GetString(1), precio = reader.GetFloat(2), finalizado = reader.GetBoolean(3), vendedor = reader.GetInt32(4), comprador = reader.GetInt32(5), comienzo = reader.GetDateTime(6), fin = reader.GetDateTime(7), imagen = reader.GetString(8), descripcion = reader.GetString(9), categoria = reader.GetString(10) });
+                }
             }
             return subastas;
         }
@@ -109,15 +149,3 @@ namespace WebApii.Controllers
         }
     }
 }
-    /*public IEnumerable<Subasta> GetAllSubastas()     // FUNCION EN LA QUE RECOGEMOS TODAS LAS SUBASTAS
-        {
-            MySqlConnection conn = new MySqlConnection(conexion);
-            conn.Open();
-            MySqlCommand cmd = new MySqlCommand("Select * from subasta", conn);
-            MySqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                subastas.Add(new Subasta { id = reader.GetInt32(0), articulo = reader.GetString(1), precio = reader.GetFloat(2), finalizado = reader.GetBoolean(3), vendedor = reader.GetInt32(4), comprador = reader.GetInt32(5), comienzo = reader.GetDateTime(6), fin = reader.GetDateTime(7), imagen = reader.GetString(8), descripcion = reader.GetString(9), categoria = reader.GetString(10) });
-            }
-            return subastas;
-        }*/

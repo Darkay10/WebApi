@@ -67,5 +67,21 @@ namespace WebApii.Controllers
             conn.Close();
             return hecho;
         }
+        // FUNCION PARA SACAR EL LA PUJA MÁXIMA
+        [HttpGet]
+        public float PujaMaxima(int id)
+        {
+            float pujamax = -1;
+            MySqlConnection conn = new MySqlConnection(conexion);
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("select Max(preciopuja) AS 'Preciopuja' from puja where idsubasta = "+id, conn);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                pujamax = reader.GetFloat(0);
+            }
+            conn.Close();
+            return pujamax;
+        }
     }
 }

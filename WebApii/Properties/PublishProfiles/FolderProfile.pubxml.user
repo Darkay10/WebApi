@@ -196,10 +196,10 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>04/17/2020 17:58:57</publishTime>
     </File>
     <File Include="bin/WebApii.dll">
-      <publishTime>05/04/2020 07:48:43</publishTime>
+      <publishTime>05/17/2020 02:06:03</publishTime>
     </File>
     <File Include="bin/WebApii.pdb">
-      <publishTime>05/04/2020 07:48:43</publishTime>
+      <publishTime>05/17/2020 02:06:03</publishTime>
     </File>
     <File Include="Global.asax">
       <publishTime>04/17/2020 17:58:56</publishTime>
