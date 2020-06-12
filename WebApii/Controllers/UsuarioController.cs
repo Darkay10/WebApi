@@ -7,9 +7,9 @@ namespace WebApii.Controllers
 {
     public class UsuarioController : ApiController
     {
+        // VARIABLES GLOBALES - InsertUsuario? u = Jose & p = Jose & e = 222 & d = Calle & l = Alicante & pais = Mozambique & cod = 22221 & rol = 1
         List<Usuario> usuarios = new List<Usuario>();
         string conexion = "server=127.0.0.1; port=3306;user id=root; password=;database=bdsubastas;";
-
         public IEnumerable<Usuario> GetAllUsuarios()    // FUNCION EN LA QUE RECOGEMOS TODOS LOS USUARIOS
 
         {
@@ -24,7 +24,6 @@ namespace WebApii.Controllers
             }
             return usuarios;
         }
-
         public IHttpActionResult GetUsuario(int id)     // RECOGEMOS UN USUARIO POR ID
         {
             bool existe = false;
@@ -47,7 +46,6 @@ namespace WebApii.Controllers
             }
             return Ok(usuarios);
         }
-
         public IEnumerable<Usuario> GetUsuariosMenosUno(int id) // RECOGEMOS TODOS LOS USUARIOS MENOS EL NUESTRO
         {
             MySqlConnection conn = new MySqlConnection(conexion);
@@ -61,8 +59,6 @@ namespace WebApii.Controllers
             }
             return usuarios;
         }
-
-        // InsertUsuario? u = Jose & p = Jose & e = 222 & d = Calle & l = Alicante & pais = Mozambique & cod = 22221 & rol = 1
         // FUNCION QUE SE LE PASAN TODOS LOS DATOS Y SE INSERTAN A LA BASE DE DATOS - Por defecto el permiso de admin esta deshabilitado
         [HttpGet]
         public bool InsertUsuario(string u, string p, string e, string d, string l, string pais, string cod)
@@ -118,7 +114,7 @@ namespace WebApii.Controllers
             bool hecho = false;
             MySqlConnection conn = new MySqlConnection(conexion);
             conn.Open();
-            MySqlCommand cmd = new MySqlCommand("UPDATE usuario SET pass = " + pass + " WHERE id = " + id, conn);
+            MySqlCommand cmd = new MySqlCommand("UPDATE usuario SET pass = '" + pass + "' WHERE id = " + id, conn);
             int res = cmd.ExecuteNonQuery();
             if (res != 0)
             {

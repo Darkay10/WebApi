@@ -121,6 +121,20 @@ namespace WebApii.Controllers
             return subastas;
         }
 
+        public IEnumerable<Subasta> GetPujasGanadas(int id) // SELECCIONAMOS UNA SUBASTA POR ID - Mis subastas
+        {
+            MySqlConnection connection = new MySqlConnection(conexion);
+            connection.Open();
+            MySqlCommand suba = new MySqlCommand("select * from subasta where idcomprador = " + id + " AND finalizado = TRUE", connection);
+            MySqlDataReader lectura = suba.ExecuteReader();
+            while (lectura.Read())
+            {                 
+                subastas.Add(new Subasta { id = lectura.GetInt32(0), articulo = lectura.GetString(1), precio = lectura.GetFloat(2), finalizado = lectura.GetBoolean(3), vendedor = lectura.GetInt32(4), comprador = lectura.GetInt32(5), comienzo = lectura.GetDateTime(6), fin = lectura.GetDateTime(7), imagen = lectura.GetString(8), descripcion = lectura.GetString(9), categoria = lectura.GetString(10) });                
+            }
+            connection.Close();
+            return subastas;
+        }
+
         public IHttpActionResult GetSubasta(int id) // SELECCIONAMOS UNA SUBASTA POR ID
         {
             bool existe = false;

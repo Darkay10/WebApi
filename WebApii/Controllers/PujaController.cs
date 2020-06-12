@@ -18,40 +18,56 @@ namespace WebApii.Controllers
         public bool InsertPuja(int idu, int ids, float p)
         {
             bool hecho = false;
+            bool mayor = false;
             int exist = 1;
-            MySqlConnection connection = new MySqlConnection(conexion);
-            connection.Open();
-            MySqlCommand existe = new MySqlCommand("select * from puja where idsubasta = " + ids + " AND idusuario = " + idu, connection);
-            MySqlDataReader reader = existe.ExecuteReader();
-            while (reader.Read())
+            MySqlConnection co = new MySqlConnection(conexion);
+            co.Open();
+            MySqlCommand e = new MySqlCommand("select MAX(preciopuja) AS 'maximototal' from puja where idsubasta = " + ids, co);
+            MySqlDataReader lec = e.ExecuteReader();
+            while (lec.Read())
             {
-                if (reader.GetFloat(2) < p)
-                    exist = 2;
-                else
-                    exist = 3;
-            }
-            connection.Close();
-            MySqlConnection conn = new MySqlConnection(conexion);
-            conn.Open();
-            if (exist == 1)
-            { 
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO puja (idusuario, idsubasta, preciopuja, tiempo) VALUES (" + idu + ", " + ids + ", " + p + ", '" + DateTime.Now.ToString("yyyy-MM-dd") + "')", conn);
-                int res = cmd.ExecuteNonQuery();
-                if (res != 0)
+                if (p > lec.GetFloat(0))
                 {
-                    hecho = true;
+                    mayor = true;
                 }
             }
-            else if (exist == 2)
-            {
-                MySqlCommand cmd = new MySqlCommand("UPDATE puja SET preciopuja = " + p + ", tiempo = '" + DateTime.Now.ToString("yyyy-MM-dd") + "' WHERE idsubasta = " + ids + " AND idusuario = " + idu, conn);
-                int res = cmd.ExecuteNonQuery();
-                if (res != 0)
+            co.Close();
+            if (mayor == true)
+            {         
+                MySqlConnection connection = new MySqlConnection(conexion);
+                connection.Open();
+                MySqlCommand existe = new MySqlCommand("select * from puja where idsubasta = " + ids + " AND idusuario = " + idu, connection);
+                MySqlDataReader reader = existe.ExecuteReader();
+                while (reader.Read())
                 {
-                    hecho = true;
+                    if (reader.GetFloat(2) < p)
+                        exist = 2;
+                    else
+                        exist = 3;
                 }
+                connection.Close();
+                MySqlConnection conn = new MySqlConnection(conexion);
+                conn.Open();
+                if (exist == 1)
+                { 
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO puja (idusuario, idsubasta, preciopuja, tiempo) VALUES (" + idu + ", " + ids + ", " + p + ", '" + DateTime.Now.ToString("yyyy-MM-dd") + "')", conn);
+                    int res = cmd.ExecuteNonQuery();
+                    if (res != 0)
+                    {
+                        hecho = true;
+                    }
+                }
+                else if (exist == 2)
+                {
+                    MySqlCommand cmd = new MySqlCommand("UPDATE puja SET preciopuja = " + p + ", tiempo = '" + DateTime.Now.ToString("yyyy-MM-dd") + "' WHERE idsubasta = " + ids + " AND idusuario = " + idu, conn);
+                    int res = cmd.ExecuteNonQuery();
+                    if (res != 0)
+                    {
+                        hecho = true;
+                    }
+                }
+                conn.Close();
             }
-            conn.Close();
             return hecho;
         }
     }
